@@ -1,22 +1,24 @@
 import 'package:dio/dio.dart';
 
-class Characters {
+class Character {
   final String name;
   final String url;
 
-  Characters(this.name, this.url);
+  Character(this.name, this.url);
 
-  factory Characters.fromJson(dynamic data) {
-    return Characters(data['name'], data['url']);
+  factory Character.fromJson(dynamic data) {
+    return Character(data['name'], data['url']);
   }
 }
 
 class Infomation {
-  //get image of starwars
-  Future<List<Characters>> fetchPeople({int page = 1}) async {
+  //get info of character
+  Future<List<Character>> fetchPeople({int page = 1}) async {
     var response = await Dio().get('https://swapi.dev/api/people/?page=$page');
 
     List<dynamic> results = response.data['response'];
-    return results.map((it) => Characters.fromJson(it)).toList();
+    return results.map((it) => Character.fromJson(it)).toList();
   }
+
+  fetchChar({int page}) {}
 }

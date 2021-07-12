@@ -1,52 +1,40 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:myapp/infomation.dart';
 
 class PhotoScroll extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _PhotoScroll_State();
+    return _PhotoScrollState();
   }
 }
 
-class _PhotoScroll_State extends State<PhotoScroll> {
+class _PhotoScrollState extends State {
+  final Infomation _repo;
+  late List<Character> _characters;
+  late int _page;
 
-  final Infomation _info;
-  List<Characters> _char;
-  int _page;
-  final int _defaultCharPerPageCount = 10;
-  final int _nextPageThreshold = 5;
+  _PhotoScrollState() : _repo = new Infomation();
 
-  _PhotoScroll_State() : _info = new Infomation();
-
-  bool _hasMore = true;
-  bool _error = false;
-  bool _loading = true;
-
-  final int _defaultPeoplePerPageCount = 10;
-  final int _nextPageThreshold = 5;
-
-  @override
   void initState() {
     super.initState();
     _page = 1;
-    _char = [];
-    fetchChar();
-    
-    _hasMore = true;
-    _error = false;
-    _loading = true;
+    _characters = [];
+    fetchPeople();
   }
 
-  Future<void> fetchChar() async {
-  
+  Future<void> fetchPeople() async {
+    var character = await _repo.fetchPeople(page: _page);
+    setState(() {
+      _characters = List<Character>.from(character);
+      _characters.addAll(character);
+    });
   }
 
-
-  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      
-        );
-      }
-
+        itemCount: _characters.length,
+        itemBuilder: (context, index) {
+          return Text(_characters[index].name);
+        });
+  }
 }
